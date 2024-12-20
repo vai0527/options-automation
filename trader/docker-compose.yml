@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./backend:/app  # Mount backend source code
+      - /app/__pycache__/  # Ignore cache files in the container
+    ports:
+      - "5000:5000"  # Map backend port
+    environment:
+      FLASK_ENV: development
+    command: python app.py  # Run the Flask app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend:/frontend  # Mount frontend source code
+      - /frontend/node_modules/  # Ignore node_modules
+    ports:
+      - "3000:3000"  # Map frontend port
+    stdin_open: true
+    tty: true
+    command: npm start  # Start React app
