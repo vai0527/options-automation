@@ -1,23 +1,22 @@
-version: '3.9'
+version: "3.8"
 
 services:
   backend:
-    build: 
-      context: .
-      dockerfile: ./backend/docker/Dockerfile
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+    container_name: trader_backend
     ports:
       - "5000:5000"
-    environment:
-      # You can pass environment variables here if needed.
-      - FLASK_ENV=development
-    volumes:
-      - ./backend:/app  # Useful for development; remove or adjust for production.
+    # If your backend depends on other services (databases, etc.),
+    # you can add depends_on here.
 
   frontend:
-    build: 
-      context: .
-      dockerfile: ./frontend/docker/Dockerfile
+    build:
+      context: ./frontend
+      dockerfile: docker/Dockerfile
+    container_name: trader_frontend
     ports:
-      - "3000:80"  # Maps port 80 inside the container to port 3000 on your host.
-    volumes:
-      - ./frontend:/app  # Optional: useful for hot-reloading during development.
+      - "3000:80"
+    depends_on:
+      - backend
